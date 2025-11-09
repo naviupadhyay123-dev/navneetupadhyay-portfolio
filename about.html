@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Navneet — About</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="container page-animate">
+    <div class="bg-anim" aria-hidden="true">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <span class="particle particle1"></span>
+  <span class="particle particle2"></span>
+  <span class="particle particle3"></span>
+</div>
+        <header class="header">
+      <a class="brand" href="index.html">
+        <div class="avatar">
+  <img src="assets/img/avatar.png" alt="Profile picture">
+</div><div><div style="font-weight:800">Navneet Upadhyay</div><div style="font-size:13px;color:var(--muted)">Frontend Developer</div></div>
+      </a>
+
+      <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">Menu</button>
+        <div class="nav" id="nav">
+          <a href="index.html">Home</a>
+          <a href="about.html" class="active">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main style="margin-top:18px">
+      <section class="card">
+        <h2>About me</h2>
+        <p class="lead">Hey there! I’m Navneet Upadhyay, an artist, designer, and creative explorer from Jaipur, India — someone who believes that art isn’t just made with colors, but with emotions, patience, and imagination.
+
+I hold a Bachelor’s degree in Computer Applications (BCA) from Dr. K. N. Modi University, where I built a strong foundation in technology — but my heart always leaned towards visual creativity. Over time, I merged both worlds: art and tech, to create designs that not only look beautiful but also tell a story.</p>
+
+        
+
+        <div style="margin-top:12px">
+          <a class="btn" href="projects.html">My Projects</a>
+          <a class="btn" href="contact.html" style="margin-left:8px">Contact</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>Back to <a href="index.html">Home</a></footer>
+  </div>
+
+  <script>
+    function toggleMenu(){
+      const nav = document.getElementById('nav');
+      nav.style.display = (nav.style.display === 'flex') ? 'none' : 'flex';
+    }
+  </script>
+  <script>
+  // Subtle parallax effect for blobs on mouse move
+  (function(){
+    const wrapper = document.querySelector('.bg-anim');
+    if(!wrapper) return;
+
+    const blobs = wrapper.querySelectorAll('.blob');
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+
+    function onMove(e){
+      // disable on small screens for performance
+      if(window.innerWidth < 600) return;
+      const x = (e.clientX / windowWidth) - 0.5; // -0.5 .. 0.5
+      const y = (e.clientY / windowHeight) - 0.5;
+
+      blobs.forEach((b, i) => {
+        // different intensity per blob
+        const speed = (i+1) * 6; // tweak numbers for stronger/weaker parallax
+        const tx = -x * speed;
+        const ty = -y * speed;
+        b.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+      });
+    }
+
+    // light touch: use requestAnimationFrame for smoothness
+    let raf = null;
+    function handler(e){
+      if(raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(()=> onMove(e));
+    }
+
+    window.addEventListener('mousemove', handler);
+    window.addEventListener('resize', () => { windowWidth = innerWidth; windowHeight = innerHeight; });
+  })();
+</script>
+
+</body>
+</html>

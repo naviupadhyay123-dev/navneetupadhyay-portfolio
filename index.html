@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Navneet — Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Container with background animation -->
+  <div class="container page-animate">
+
+    <!-- ✨ Animated Background Layer -->
+    <div class="bg-anim" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+      <span class="particle particle1"></span>
+      <span class="particle particle2"></span>
+      <span class="particle particle3"></span>
+    </div>
+
+    <!-- 🌐 Header -->
+    <header class="header">
+      <a class="brand" href="index.html">
+        <div class="avatar">
+          <img src="assets/img/avatar.png" alt="Profile picture">
+        </div>
+        <div>
+          <div style="font-weight:800">Navneet Upadhyay</div>
+          <div style="font-size:13px;color:var(--muted)">Frontend Developer</div>
+        </div>
+      </a>
+
+      <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">Menu</button>
+        <div class="nav" id="nav">
+          <a href="index.html" class="active">Home</a>
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- 🏠 Hero Section -->
+    <section class="card hero-animate" style="margin-top:18px">
+      <h1 class="shine-text">Hi, main Navneet — Frontend Developer</h1>
+      <p class="lead fadein-text">
+        Main simplicity aur performance pe focus karta hoon. HTML, CSS aur JS se fast, responsive aur visually clean websites banata hoon jo har device pe smooth chalti hain.
+      </p>
+
+      <div style="margin-top:12px">
+        <a class="btn" href="about.html">About me</a>
+        <a class="btn" href="projects.html" style="margin-left:8px">My work</a>
+      </div>
+
+      <section style="margin-top:18px" class="card">
+        <h3>Quick Skills</h3>
+        <div class="skills">
+          <span class="skill">HTML</span>
+          <span class="skill">CSS</span>
+          <span class="skill">JavaScript</span>
+          <span class="skill">Responsive Design</span>
+          <span class="skill">Git</span>
+        </div>
+      </section>
+    </section>
+
+    <footer>
+      Made with ❤️ — By Navneet.
+    </footer>
+  </div>
+
+  <!-- 🔧 JS for Menu + Parallax Background -->
+ <script>
+(function(){
+  const container = document.querySelector('.bg-anim');
+  if(!container) return;
+
+  // number of particles (desktop). keep moderate for performance
+  const COUNT = Math.min(Math.max(14, Math.floor(window.innerWidth / 90)), 28); // responsive count
+  const frag = document.createDocumentFragment();
+
+  // helper random functions
+  const rnd = (min, max) => Math.random() * (max - min) + min;
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  // clear existing dynamic particles (if any)
+  container.querySelectorAll('.dyn-particle').forEach(n => n.remove());
+
+  for(let i=0;i<COUNT;i++){
+    const p = document.createElement('span');
+    p.className = 'particle dyn-particle';
+    // random size between 4px - 14px
+    const size = Math.round(rnd(4, 14));
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+
+    // random position within container (use % to be responsive)
+    const left = rnd(2, 96).toFixed(2) + '%';
+    const top = rnd(3, 92).toFixed(2) + '%';
+    p.style.left = left;
+    p.style.top = top;
+
+    // random opacity base (very low)
+    p.style.opacity = (rnd(0.04, 0.12)).toFixed(3);
+
+    // pick a subtle tint occasionally to match blobs (optional)
+    const tints = [
+      'rgba(255,255,255,', // neutral
+      'rgba(125,211,252,', // cyan-ish
+      'rgba(99,102,241,',  // purple-ish
+      'rgba(6,182,212,'    // bright cyan
+    ];
+    // 70% neutral, else tinted
+    const tint = Math.random() > 0.7 ? pick(tints) : 'rgba(255,255,255,';
+    // final background with low alpha
+    const alpha = (rnd(0.05, 0.18)).toFixed(2);
+    p.style.background = tint + alpha + ')';
+
+    // random animation duration and delay
+    const dur = rnd(5, 12).toFixed(2) + 's';
+    const delay = rnd(0, 4).toFixed(2) + 's';
+    p.style.animation = `particleFloat ${dur} ease-in-out ${delay} infinite`;
+
+    // slight horizontal drift using CSS transform via tiny inline transition (will be updated by parallax later)
+    p.style.transform = 'translate3d(0,0,0)';
+
+    frag.appendChild(p);
+  }
+
+  container.appendChild(frag);
+
+  // small tweak: if parallax is active, make particles move less (optional)
+  // add event if parallax wrappers present
+  const wrappers = document.querySelectorAll('.bg-anim .blob-wrap');
+  if(wrappers && wrappers.length){
+    // subtle particle reaction on mouse move
+    let ww = window.innerWidth, wh = window.innerHeight;
+    function onMove(e){
+      if(window.innerWidth < 600) return;
+      const x = (e.clientX / ww) - 0.5;
+      const y = (e.clientY / wh) - 0.5;
+      document.querySelectorAll('.dyn-particle').forEach((el, i) => {
+        // small multiplier, keep particles subtle
+        const mx = -x * (2 + (i % 3));
+        const my = -y * (2 + (i % 4)) * 0.6;
+        el.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+      });
+    }
+    let raf = null;
+    function handler(e){ if(raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(()=> onMove(e)); }
+    window.addEventListener('mousemove', handler, {passive:true});
+    window.addEventListener('resize', ()=>{ ww = innerWidth; wh = innerHeight; });
+  }
+
+})();
+</script>
+
+
+</body>
+</html>
